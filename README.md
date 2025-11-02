@@ -13,7 +13,6 @@ All embeddings are stored in-memory via Qdrant’s Python client; no external ve
 ## 🚀 Quick start
 
 ```powershell
-cd "e:\College\Sem 3\Software Lab\Rag_Project"
 pip install -r requirements.txt
 ```
 
@@ -45,20 +44,6 @@ frontend/
 ```
 
 Static assets are mounted at `/static`, so the HTML references `/static/css/style.css` and `/static/js/app.js`.
-
----
-
-## 🔌 Optional LLM summarisation
-
-Configure an OpenAI-compatible endpoint and set environment variables before launching the CLI or API:
-
-```powershell
-setx MOVIE_RAG_LLM_MODEL "Llama-3.2-3B-Instruct"
-setx MOVIE_RAG_LLM_BASE_URL "http://127.0.0.1:8080/v1"
-setx MOVIE_RAG_LLM_API_KEY "sk-no-key"  # if your server requires one
-```
-
-Pass `--summarize` to the CLI or use the “Summarize results” toggle in the UI to enable LLM verdicts.
 
 ---
 
