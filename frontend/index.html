@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Movie RAG Explorer</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <main class="panel">
+    <h1>Movie RAG Explorer</h1>
+    <form id="query-form">
+      <label>
+        Describe what you feel like watching
+        <textarea id="prompt" placeholder="E.g. light-hearted space comedies" required></textarea>
+      </label>
+      <label>
+        Number of results
+        <input id="top-k" type="number" min="1" max="20" value="3" />
+      </label>
+      <label class="toggle-row">
+        <input id="summarize" type="checkbox" />
+        Summarize results with LLM (requires server configuration)
+      </label>
+      <button type="submit">Find Movies</button>
+      <p id="status" class="status"></p>
+    </form>
+    <section id="results" class="results" aria-live="polite"></section>
+    <section id="summary" class="summary" hidden></section>
+  </main>
+
+  <script src="/static/js/app.js" defer></script>
+</body>
+</html>
