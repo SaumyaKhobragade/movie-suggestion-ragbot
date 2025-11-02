@@ -1,4 +1,4 @@
-# 🎬 Movie Recommendation Assistant
+# 🎬 Movie Suggestion Bot
 
 Fast, local-friendly RAG pipeline for movie discovery. The project ships with:
 
@@ -6,7 +6,7 @@ Fast, local-friendly RAG pipeline for movie discovery. The project ships with:
 - `app.py` — FastAPI service that powers a browser UI under `frontend/`.
 - `movies_dataset.csv` — curated dataset used to build the vector store.
 
-All embeddings are stored in-memory via Qdrant’s Python client; no external vector DB is required. Optional LLM summarisation works with any OpenAI-compatible endpoint (Ollama, llama.cpp server, etc.).
+All embeddings are stored in-memory via Qdrant’s Python client; no external vector DB is required.
 
 ---
 

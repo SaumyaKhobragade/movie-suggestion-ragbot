@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import os
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -10,12 +9,14 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
-from rag_cli import MovieHit, MovieRAG, summarise_hits
+from analysis_data import MovieAnalytics
+from rag_cli import MovieRAG
 
-APP_TITLE = "Movie RAG"
-APP_DESCRIPTION = "Query the movie dataset with semantic search and optional summarisation."
+APP_TITLE = "Movie Suggestion Bot"
+APP_DESCRIPTION = "Discover movies with fast semantic search."
 FRONTEND_DIR = Path(__file__).parent / "frontend"
 INDEX_FILE = FRONTEND_DIR / "index.html"
+ANALYSIS_FILE = FRONTEND_DIR / "analysis.html"
 
 app = FastAPI(title=APP_TITLE, description=APP_DESCRIPTION)
 app.add_middleware(
@@ -30,16 +31,13 @@ if FRONTEND_DIR.exists():
     app.mount("/static", StaticFiles(directory=FRONTEND_DIR), name="static")
 
 rag = MovieRAG()
-
-LLM_MODEL = os.getenv("MOVIE_RAG_LLM_MODEL")
-LLM_BASE_URL = os.getenv("MOVIE_RAG_LLM_BASE_URL")
-LLM_API_KEY = os.getenv("MOVIE_RAG_LLM_API_KEY", os.getenv("OPENAI_API_KEY"))
+analytics = MovieAnalytics.from_dataset()
 
 
 class SearchRequest(BaseModel):
     prompt: str = Field(..., min_length=1, description="Natural language query")
     top_k: int = Field(3, ge=1, le=20, description="Number of matches to return")
-    summarize: bool = Field(False, description="Return an LLM-crafted summary when available")
+    summarize: bool = Field(False, description="Deprecated flag retained for backwards compatibility.")
 
 
 class MovieResult(BaseModel):
@@ -52,7 +50,6 @@ class MovieResult(BaseModel):
 
 class SearchResponse(BaseModel):
     results: List[MovieResult]
-    summary: Optional[str] = None
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -60,6 +57,13 @@ def serve_index() -> str:
     if not INDEX_FILE.exists():
         raise HTTPException(status_code=404, detail="Frontend not found")
     return INDEX_FILE.read_text(encoding="utf-8")
+
+
+@app.get("/analysis", response_class=HTMLResponse)
+def serve_analysis() -> str:
+    if not ANALYSIS_FILE.exists():
+        raise HTTPException(status_code=404, detail="Analysis frontend not found")
+    return ANALYSIS_FILE.read_text(encoding="utf-8")
 
 
 @app.post("/api/search", response_model=SearchResponse)
@@ -80,20 +84,12 @@ def search_movies(request: SearchRequest) -> SearchResponse:
         for hit in hits
     ]
 
-    summary: Optional[str] = None
-    if request.summarize and LLM_MODEL:
-        try:
-            summary = summarise_hits(
-                hits,
-                prompt,
-                llm_model=LLM_MODEL,
-                base_url=LLM_BASE_URL,
-                api_key=LLM_API_KEY,
-            )
-        except Exception as exc:  # noqa: BLE001
-            raise HTTPException(status_code=502, detail=f"LLM summarisation failed: {exc}") from exc
+    return SearchResponse(results=results)
 
-    return SearchResponse(results=results, summary=summary)
+
+@app.get("/api/analysis")
+def get_analysis_summary() -> Dict[str, Any]:
+    return analytics.summary_payload()
 
 
 def _safe_str(value: Any) -> Optional[str]:

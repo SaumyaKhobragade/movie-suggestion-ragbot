@@ -1,9 +1,7 @@
 const form = document.getElementById("query-form");
 const promptInput = document.getElementById("prompt");
 const topKInput = document.getElementById("top-k");
-const summarizeInput = document.getElementById("summarize");
 const resultsSection = document.getElementById("results");
-const summarySection = document.getElementById("summary");
 const statusLabel = document.getElementById("status");
 const submitButton = form.querySelector("button");
 
@@ -16,19 +14,16 @@ form.addEventListener("submit", async (event) => {
   }
 
   const topK = Number(topKInput.value) || 3;
-  const summarize = summarizeInput.checked;
 
   submitButton.disabled = true;
   statusLabel.textContent = "Searching...";
-  summarySection.hidden = true;
-  summarySection.textContent = "";
   resultsSection.replaceChildren();
 
   try {
     const response = await fetch("/api/search", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt, top_k: topK, summarize })
+      body: JSON.stringify({ prompt, top_k: topK })
     });
 
     if (!response.ok) {
@@ -49,9 +44,10 @@ form.addEventListener("submit", async (event) => {
 
 function renderResults(payload) {
   resultsSection.replaceChildren();
-  (payload.results || []).forEach((item) => {
+  (payload.results || []).forEach((item, index) => {
     const card = document.createElement("article");
-    card.className = "card";
+    card.className = "card result-card";
+    card.style.setProperty("--stagger-delay", `${index * 140}ms`);
 
     const title = document.createElement("h2");
     title.textContent = item.title || "Untitled";
@@ -70,8 +66,4 @@ function renderResults(payload) {
     resultsSection.appendChild(card);
   });
 
-  if (payload.summary) {
-    summarySection.hidden = false;
-    summarySection.textContent = payload.summary;
-  }
 }

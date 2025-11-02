@@ -1,0 +1,132 @@
+:root {
+    --accent-1: #5b8def;
+    --accent-2: #87f7ff;
+    --accent-3: #ff7f9c;
+}
+
+body {
+    min-height: 100vh;
+}
+
+.analysis-container {
+    width: 100%;
+    max-width: var(--content-width);
+    margin: clamp(2rem, 6vw, 4rem) auto 64px;
+    padding: 0 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+}
+
+.analysis-intro {
+    text-align: center;
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 40px 32px;
+    border: 1px solid rgba(135, 247, 255, 0.14);
+    box-shadow: var(--card-shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.analysis-intro h1 {
+    font-size: 32px;
+    margin: 0;
+    color: var(--accent-2);
+}
+
+.analysis-intro p {
+    max-width: 720px;
+    margin: 0 auto;
+    color: rgba(229, 238, 255, 0.85);
+    line-height: 1.5;
+}
+
+.grid {
+    display: grid;
+    row-gap: 40px;
+    column-gap: 40px;
+}
+
+@media (min-width: 900px) {
+    .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+.metric-card {
+    padding: 1.8rem;
+    gap: 1.25rem;
+}
+
+.metric-card header h2 {
+    font-size: 22px;
+    margin-bottom: 6px;
+    color: var(--accent-2);
+}
+
+.metric-card header p {
+    color: rgba(229, 238, 255, 0.7);
+    font-size: 15px;
+    margin-bottom: 0;
+}
+
+.metric-card canvas {
+    width: 100% !important;
+    height: 320px !important;
+}
+
+.metric-card .standout-list {
+    display: grid;
+    gap: 18px;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.standout-item {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 18px;
+    border-radius: 12px;
+    background: rgba(30, 55, 95, 0.65);
+    border: 1px solid rgba(135, 247, 255, 0.08);
+}
+
+.standout-item h3 {
+    font-size: 18px;
+    color: var(--accent-2);
+    margin: 0;
+}
+
+.standout-item span {
+    font-size: 13px;
+    color: rgba(229, 238, 255, 0.65);
+}
+
+.standout-item strong {
+    color: var(--accent-3);
+}
+
+.full-span {
+    grid-column: 1 / -1;
+}
+
+@media (max-width: 768px) {
+    .analysis-intro h1 {
+        font-size: 26px;
+    }
+
+    .metric-card {
+        padding: 1.6rem;
+        gap: 1.1rem;
+    }
+
+    .metric-card canvas {
+        height: 240px !important;
+    }
+
+    .full-span {
+        grid-column: 1 / -1;
+    }
+}

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Movie Insights Dashboard</title>
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <link rel="stylesheet" href="/static/css/analysis.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script defer src="/static/js/theme.js"></script>
+    <script defer src="/static/js/analysis.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-inner">
+            <div class="navbar-brand">Movie Insights Dashboard</div>
+            <div class="navbar-actions">
+                <a class="btn" href="/">Back to Search</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="analysis-container">
+        <section class="analysis-intro">
+            <h1>Discover Trends Across 1,000+ Films</h1>
+            <p>Explore profitability, genre performance, release trends, and relationships between key metrics. Data updates automatically from the same knowledge base powering the movie assistant.</p>
+        </section>
+
+        <section class="grid">
+            <article class="card metric-card" id="top-genres">
+                <header>
+                    <h2>Top Genres by Average Profit</h2>
+                    <p>Profitability highlights for the most resilient genres.</p>
+                </header>
+                <canvas></canvas>
+            </article>
+
+            <article class="card metric-card" id="profit-margins">
+                <header>
+                    <h2>Median Profit Margins</h2>
+                    <p>How much each genre keeps after costs.</p>
+                </header>
+                <canvas></canvas>
+            </article>
+
+            <article class="card metric-card" id="revenue-trend">
+                <header>
+                    <h2>Revenue &amp; Profit Over Time</h2>
+                    <p>Industry momentum from early cinema to the streaming era.</p>
+                </header>
+                <canvas></canvas>
+            </article>
+
+            <article class="card metric-card" id="correlation">
+                <header>
+                    <h2>Metric Relationships</h2>
+                    <p>Heatmap reveals how budget, revenue, ratings, and votes interact.</p>
+                </header>
+                <canvas></canvas>
+            </article>
+
+            <article class="card metric-card full-span" id="standouts">
+                <header>
+                    <h2>High-Impact Releases</h2>
+                    <p>Movies that combined box-office power with audience acclaim.</p>
+                </header>
+                <div class="standout-list"></div>
+            </article>
+        </section>
+    </main>
+</body>
+</html>

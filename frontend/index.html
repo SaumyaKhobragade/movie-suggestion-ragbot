@@ -3,32 +3,36 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Movie RAG Explorer</title>
+  <title>Movie Suggestion Bot</title>
   <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <div class="navbar-brand">Movie Suggestion Bot</div>
+      <div class="navbar-actions">
+        <a id="view-analysis" class="btn" href="/analysis">View Analysis</a>
+      </div>
+    </div>
+  </nav>
   <main class="panel">
-    <h1>Movie RAG Explorer</h1>
+    <p class="lead">Describe the vibe you want and we&rsquo;ll surface matching movies.</p>
     <form id="query-form">
       <label>
         Describe what you feel like watching
         <textarea id="prompt" placeholder="E.g. light-hearted space comedies" required></textarea>
       </label>
-      <label>
-        Number of results
+      <label class="field-inline">
+        <span>Number of results</span>
         <input id="top-k" type="number" min="1" max="20" value="3" />
-      </label>
-      <label class="toggle-row">
-        <input id="summarize" type="checkbox" />
-        Summarize results with LLM (requires server configuration)
       </label>
       <button type="submit">Find Movies</button>
       <p id="status" class="status"></p>
     </form>
     <section id="results" class="results" aria-live="polite"></section>
-    <section id="summary" class="summary" hidden></section>
   </main>
 
+  <script src="/static/js/theme.js" defer></script>
   <script src="/static/js/app.js" defer></script>
 </body>
 </html>
