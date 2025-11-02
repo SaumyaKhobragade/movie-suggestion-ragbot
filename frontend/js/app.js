@@ -5,6 +5,77 @@ const resultsSection = document.getElementById("results");
 const statusLabel = document.getElementById("status");
 const submitButton = form.querySelector("button");
 
+function humanizeKey(key) {
+  return key
+    .replace(/_/g, " ")
+    .replace(/\b\w/g, (char) => char.toUpperCase())
+    .replace(/\s{2,}/g, " ");
+}
+
+function formatValue(value) {
+  if (value === null || value === undefined || value === "") {
+    return "—";
+  }
+
+  if (typeof value === "number") {
+    if (Math.abs(value) >= 1_000_000) {
+      return `${(value / 1_000_000).toFixed(2)} M`;
+    }
+    return value.toLocaleString();
+  }
+
+  if (Array.isArray(value)) {
+    return value.length ? value.join(", ") : "—";
+  }
+
+  if (typeof value === "object") {
+    return JSON.stringify(value, null, 2);
+  }
+
+  return String(value);
+}
+
+function buildDetailsTable(payload) {
+  const table = document.createElement("table");
+  table.className = "data-table";
+
+  const tbody = document.createElement("tbody");
+
+  Object.entries(payload || {}).forEach(([rawKey, rawValue]) => {
+    const row = document.createElement("tr");
+
+    const keyCell = document.createElement("th");
+    keyCell.scope = "row";
+    keyCell.textContent = humanizeKey(rawKey);
+
+    const valueCell = document.createElement("td");
+    const formattedValue = formatValue(rawValue);
+
+    if (typeof rawValue === "object" && rawValue !== null && !Array.isArray(rawValue)) {
+      const code = document.createElement("pre");
+      code.textContent = formattedValue;
+      valueCell.appendChild(code);
+    } else {
+      valueCell.textContent = formattedValue;
+    }
+
+    row.append(keyCell, valueCell);
+    tbody.appendChild(row);
+  });
+
+  if (!tbody.children.length) {
+    const emptyRow = document.createElement("tr");
+    const emptyCell = document.createElement("td");
+    emptyCell.colSpan = 2;
+    emptyCell.textContent = "No additional details available.";
+    emptyRow.appendChild(emptyCell);
+    tbody.appendChild(emptyRow);
+  }
+
+  table.appendChild(tbody);
+  return table;
+}
+
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
   const prompt = promptInput.value.trim();
@@ -59,11 +130,9 @@ function renderResults(payload) {
     const score = `Score: ${item.score.toFixed(4)}`;
     meta.textContent = `${genre} • ${year} • ${score}`;
 
-    const details = document.createElement("pre");
-    details.textContent = JSON.stringify(item.payload, null, 2);
+    const detailTable = buildDetailsTable(item.payload || {});
 
-    card.append(title, meta, details);
+    card.append(title, meta, detailTable);
     resultsSection.appendChild(card);
   });
-
 }
