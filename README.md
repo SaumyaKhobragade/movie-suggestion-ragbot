@@ -1,4 +1,3 @@
-docker run -p 6333:6333 qdrant/qdrant
 # 🎬 Movie Recommendation Assistant
 
 Fast, local-friendly RAG pipeline for movie discovery. The project ships with:
